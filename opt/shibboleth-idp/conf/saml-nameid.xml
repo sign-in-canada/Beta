@@ -30,24 +30,50 @@
     
     <!-- SAML 2 NameID Generation -->
     <util:list id="shibboleth.SAML2NameIDGenerators">
-    
-        <ref bean="shibboleth.SAML2TransientGenerator" />
-		
-    <bean parent="shibboleth.SAML2AttributeSourcedGenerator" 
-        p:format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
-        p:attributeSourceIds="#{ {'persistentId'} }"/>
-        
-        <!-- Uncommenting this bean requires configuration in saml-nameid.properties. -->
-        <!--
-        <ref bean="shibboleth.SAML2PersistentGenerator" />
-        -->
 
-        <!--
-        <bean parent="shibboleth.SAML2AttributeSourcedGenerator"
-            p:format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
-            p:attributeSourceIds="#{ {'mail'} }" />
-        -->
-                
+    <!-- Pass through CBS PAIs -->
+    <bean parent="shibboleth.SAML2AttributeSourcedGenerator"
+        p:format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+        p:idPNameQualifier="https://cbs-uat-cbs.securekey.com"
+        p:attributeSourceIds="#{ {'persistentId'} }">
+        <property name="ActivationCondition">
+           <bean class="net.shibboleth.idp.profile.logic.SimpleAttributePredicate">
+                <property name="attributeValueMap">
+                    <map>
+                       <entry key="website">
+                          <list>
+                             <value>https://cbs-uat-cbs.securekey.com</value>
+                         </list>
+                      </entry>
+                    </map>
+                </property>
+           </bean>
+        </property>
+    </bean>
+
+    <!-- Pass through GCKey PAIs -->
+    <bean parent="shibboleth.SAML2AttributeSourcedGenerator"
+        p:format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+        p:idPNameQualifier="https://te.clegc-gckey.gc.ca"
+        p:attributeSourceIds="#{ {'persistentId'} }">
+        <property name="ActivationCondition">
+           <bean class="net.shibboleth.idp.profile.logic.SimpleAttributePredicate">
+                <property name="attributeValueMap">
+                    <map>
+                       <entry key="website">
+                          <list>
+                             <value>https://te.clegc-gckey.gc.ca</value>
+                         </list>
+                      </entry>
+                    </map>
+                </property>
+           </bean>
+        </property>
+    </bean>
+
+    <!-- Generate a new PAI by default -->
+    <ref bean="shibboleth.SAML2PersistentGenerator"/>
+
     </util:list>
 
     <!-- SAML 1 NameIdentifier Generation -->
