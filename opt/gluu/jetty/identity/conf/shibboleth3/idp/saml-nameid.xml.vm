@@ -27,10 +27,21 @@
     are shown below.
     
     -->
+#set($grouped= {} )
+#if( $resovlerParams.size() > 0 )
+	#foreach( $nameIdConfig in $resovlerParams.configs )
+	    #set ($valid = true)
+		#if ($grouped[$nameIdConfig.nameIdType])
+			#set($grouped[$nameIdConfig.nameIdType] = $grouped[$nameIdConfig.nameIdType] + ", '" + $nameIdConfig.sourceAttribute + "'")
+		#else
+			#set($grouped[$nameIdConfig.nameIdType] =  "'" + $nameIdConfig.sourceAttribute + "'")
+		#end
+	#end
+#end    
     
     <!-- SAML 2 NameID Generation -->
     <util:list id="shibboleth.SAML2NameIDGenerators">
-
+    
     <!-- Pass through CBS PAIs -->
     <bean parent="shibboleth.SAML2AttributeSourcedGenerator"
         p:format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
@@ -73,7 +84,7 @@
 
     <!-- Generate a new PAI by default -->
     <ref bean="shibboleth.SAML2PersistentGenerator"/>
-
+                
     </util:list>
 
     <!-- SAML 1 NameIdentifier Generation -->
@@ -83,6 +94,7 @@
 
         <!--
         <bean parent="shibboleth.SAML1AttributeSourcedGenerator"
+            p:omitQualifiers="true"
             p:format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
             p:attributeSourceIds="#{ {'mail'} }" />
         -->
