@@ -4,15 +4,20 @@ var recipientId = resolutionContext.getAttributeRecipientID();
 logger.info("Attribute Recipient ID {} ", recipientId);
 
 var transientIds = transientId.getValues().iterator();
+var profileValues = profile.getValues().iterator();
 
-if (transientIds.hasNext()) { //Assume only one
-   var claimSource = persistentIds.next();
-   var matches = claimSource.match(/^([^\|]+)\|([^\|]+)\|(.*)$/);
+while (transientIds.hasNext()) {
+   var transientIdValue = transientIds.next();
+   var matches = transientIdValue.match(/^([^\|]+)\|([^\|]+)\|(.*)$/);
+   if (matches === null) continue; // Skip garbage
    var expiry = matches[1];
    var rpEntity = matches[2];
-   
-   if (new Date().getTime() > parseInt(expiry)
-       && rpEntity === recipienmtId) {
-         
-   claimSource.addValue(profile);
+
+   logger.info("Found access token for {} with expiry {}", rpEntity, new Date(parseInt(expiry)));
+   if (new Date().getTime() > parseInt(expiry) && rpEntity === recipientId && profileValues.hasNext()) {
+      var profileValue = profileValues.next();
+      logger.info("Populating a value for the claim source {}", profileValue);
+      claimSource.addValue(profileValue);
+      break;
+   }
 }
