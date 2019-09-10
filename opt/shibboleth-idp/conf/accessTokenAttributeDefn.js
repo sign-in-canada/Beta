@@ -16,7 +16,7 @@ while (transientIds.hasNext()) {
    var token = matches[3];
 
    logger.info("Found access token for {} with expiry {}", rpEntity, new Date(parseInt(expiry)));
-   if (new Date().getTime() > parseInt(expiry)
+   if (new Date().getTime() / 1000 > parseInt(expiry)
       && rpEntity === recipientId) {
 
       logger.info("Populating a value for the access token {}", token);

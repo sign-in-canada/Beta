@@ -14,7 +14,7 @@ while (transientIds.hasNext()) {
    var rpEntity = matches[2];
 
    logger.info("Found access token for {} with expiry {}", rpEntity, new Date(parseInt(expiry)));
-   if (new Date().getTime() > parseInt(expiry) && rpEntity === recipientId && profileValues.hasNext()) {
+   if (new Date().getTime() / 1000 > parseInt(expiry) && rpEntity === recipientId && profileValues.hasNext()) {
       var profileValue = profileValues.next();
       logger.info("Populating a value for the claim source {}", profileValue);
       claimSource.addValue(profileValue);
