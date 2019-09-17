@@ -8,12 +8,12 @@ var transientIds = transientId.getValues().iterator();
 while (transientIds.hasNext()) {
    var transientIdValue = transientIds.next();
    logger.info("Found transient Id Value source {}", transientIdValue);
-   var matches =  transientIdValue.match(/^([^\|]+)\|([^\|]+)\|(.*)$/);
+   var matches =  transientIdValue.match(/^([^\|]+)\|([^\|]+)\|([^\|]+)\|(.*)$/);
    logger.info("Regex matches {}", matches);
    if (matches === null) continue; // Skip garbage
-   var expiry = matches[1];
-   var rpEntity = matches[2];
-   var token = matches[3];
+   var rpEntity = matches[1];
+   var expiry = matches[2];
+   var token = matches[4];
 
    logger.info("Found access token for {} with expiry {}", rpEntity, new Date(parseInt(expiry)));
    if (new Date().getTime() / 1000 > parseInt(expiry)

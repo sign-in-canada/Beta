@@ -16,7 +16,7 @@
     <!--      Attribute Definitions                 -->
     <!-- ========================================== -->
 
-    <!-- "internal" Attributes -->
+    <!-- "internal" Attributes retreived from LDAP -->
     <resolver:AttributeDefinition xsi:type="ad:Simple" id="persistentId" sourceAttributeID="persistentId" dependencyOnly="true">
         <resolver:Dependency ref="siteDataConnector" />
         <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:1.3.6.1.4.1.48710.1.3.291" friendlyName="persistentId" encodeType="false" />
@@ -42,16 +42,19 @@
     </resolver:AttributeDefinition>
 
     <!-- Attributes for identity "pass-around" -->
-    <resolver:AttributeDefinition id="claimSource" xsi:type="resolver:ScriptedAttribute">
+    <resolver:AttributeDefinition id="userInfo" xsi:type="resolver:ScriptedAttribute" dependencyOnly="true">
         <resolver:InputAttributeDefinition ref="transientId" />
-        <resolver:InputAttributeDefinition ref="profile" />
-        <resolver:ScriptFile>/opt/shibboleth-idp/conf/claimSourceAttributeDefn.js</resolver:ScriptFile>
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:TBD" friendlyName="claim-source" encodeType="false" />
+        <resolver:ScriptFile>/opt/shibboleth-idp/conf/selectTransientId.js</resolver:ScriptFile>
     </resolver:AttributeDefinition>
-    <resolver:AttributeDefinition id="accessToken" xsi:type="resolver:ScriptedAttribute">
-        <resolver:InputAttributeDefinition ref="transientId" />
-        <resolver:ScriptFile>/opt/shibboleth-idp/conf/accessTokenAttributeDefn.js</resolver:ScriptFile>
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:ietf:params:oauth:token-type:access_token" friendlyName="access-token" encodeType="false" />
+
+    <resolver:AttributeDefinition id="claimSource" xsi:type="resolver:RegexSplit" regex="([^|]+).*">
+        <resolver:InputAttributeDefinition ref="userInfo" />
+        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:TBD" friendlyName="claim_source" encodeType="false" />
+    </resolver:AttributeDefinition>
+
+    <resolver:AttributeDefinition id="accessToken" xsi:type="resolver:RegexSplit" regex="[^|]+\|(.*)">
+        <resolver:InputAttributeDefinition ref="userInfo" />
+        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:ietf:params:oauth:token-type:access_token" friendlyName="access_token" encodeType="false" />
     </resolver:AttributeDefinition>
 
     <!-- Attributes for identity "pass-through" -->
