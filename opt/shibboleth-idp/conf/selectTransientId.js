@@ -7,7 +7,7 @@ var transientIds = transientId.getValues().iterator();
 
 while (transientIds.hasNext()) {
    var transientIdValue = transientIds.next();
-   var matches = transientIdValue.match(/^([^\|]+)\|(\d+)\|([^\|]+)\|(.*)$/);
+   var matches = transientIdValue.match(/([^\|]+)\|(\d+)\|([^\|]+)\|(.*)/);
    if (matches === null) { // Skip garbage
       logger.error("Malformed value for transientId: {}", transientIdValue);
       continue;
