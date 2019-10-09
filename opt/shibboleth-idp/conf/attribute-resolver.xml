@@ -49,12 +49,12 @@
 
     <resolver:AttributeDefinition id="claimSource" xsi:type="resolver:RegexSplit" regex="([^|]+).*">
         <resolver:InputAttributeDefinition ref="userInfo" />
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:oid:TBD" friendlyName="claim_source" encodeType="false" />
+        <resolver:AttributeEncoder xsi:type="enc:SAML2String" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" name="urn:oid:TBD" friendlyName="claim_source" encodeType="false" />
     </resolver:AttributeDefinition>
 
     <resolver:AttributeDefinition id="accessToken" xsi:type="resolver:RegexSplit" regex="[^|]+\|(.*)">
         <resolver:InputAttributeDefinition ref="userInfo" />
-        <resolver:AttributeEncoder xsi:type="enc:SAML2String" name="urn:ietf:params:oauth:token-type:access_token" friendlyName="access_token" encodeType="false" />
+        <resolver:AttributeEncoder xsi:type="enc:SAML2String" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" name="urn:ietf:params:oauth:token-type:access_token" friendlyName="access_token" encodeType="false" />
     </resolver:AttributeDefinition>
 
     <!-- Attributes for identity "pass-through" -->
