@@ -13,7 +13,7 @@ while (transientIds.hasNext()) {
       continue;
    }
    var rpEntity = matches[1];
-   var expiry = parseInt(matches[2]) * 1000;
+   var expiry = parseInt(matches[2]) * 1000 + 300000;
    var claimsURL = matches[3];
    var accessToken = matches[4];
 
