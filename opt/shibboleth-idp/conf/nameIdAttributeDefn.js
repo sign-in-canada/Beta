@@ -1,11 +1,17 @@
 NameIDBuilder = Java.type("org.opensaml.saml.saml2.core.impl.NameIDBuilder");
 XMLObjectAttributeValue = Java.type("net.shibboleth.idp.attribute.XMLObjectAttributeValue");
+AuthnRequest = Java.type("org.opensaml.saml.saml2.core.AuthnRequest");
 
 logger = Java.type("org.slf4j.LoggerFactory").getLogger("net.shibboleth.idp.attribute");
 
-//TODO: test to see if this respects affilliations
-recipientId = resolutionContext.getAttributeRecipientID();
-logger.info("Attribute Recipient ID {} ", recipientId);
+inboundMessage = profileContext.getInboundMessageContext().getMessage();
+if (inboundMessage instanceof AuthnRequest
+    && inboundMessage.getNameIDPolicy() != null
+    && inboundMessage.getNameIDPolicy().getSPNameQualifier() != null) {
+   recipientId = inboundMessage.getNameIDPolicy().getSPNameQualifier();
+   } else {
+   recipientId = resolutionContext.getAttributeRecipientID();
+}
 
 persistentIds = persistentId.getValues().iterator();
 
